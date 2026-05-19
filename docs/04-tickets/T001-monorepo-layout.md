@@ -88,4 +88,5 @@ Keep this ticket *very* small. It's just the empty skeleton. Resist the urge to 
 - **Deviations from the ticket (if any):**
   - Skipped creating `docs/04-tickets/.gitkeep`. The ticket lists it with the parenthetical "this folder is created but not yet committed," but the directory already exists in the working tree containing `agent-guidance.md`, `definition-of-done.md`, `000-index.md`, and all `TNNN-*.md` ticket files, so a `.gitkeep` there would have no effect. Operator confirmed skipping it during planning.
 - **TODOs left for other tickets:** None.
-- **Commit hashes:** *pending — recorded in follow-up commit (see `git log --oneline | grep T001`).*
+- **Commit hashes:**
+  - `a05c852` — chore(T001): scaffold monorepo layout
