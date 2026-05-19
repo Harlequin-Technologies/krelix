@@ -90,3 +90,4 @@ Keep this ticket *very* small. It's just the empty skeleton. Resist the urge to 
 - **TODOs left for other tickets:** None.
 - **Commit hashes:**
   - `a05c852` — chore(T001): scaffold monorepo layout
+  - `027497c` — docs(T001): record commit hash in completion summary
