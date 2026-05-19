@@ -1,6 +1,6 @@
 # T001 — Monorepo layout + git config
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 30 min
 **Depends on:** None
@@ -83,6 +83,9 @@ Keep this ticket *very* small. It's just the empty skeleton. Resist the urge to 
 ## Completion Summary
 
 - **Files touched:**
+  - Created: `.gitignore`, `backend/__init__.py`, `backend/.gitkeep`, `frontend/.gitkeep`, `agent/.gitkeep`, `packaging/.gitkeep`, `packaging/systemd/.gitkeep`
+  - Modified: `README.md` (added `## Repository Layout` section), `docs/04-tickets/T001-monorepo-layout.md` (this file)
 - **Deviations from the ticket (if any):**
-- **TODOs left for other tickets:**
-- **Commit hashes:**
+  - Skipped creating `docs/04-tickets/.gitkeep`. The ticket lists it with the parenthetical "this folder is created but not yet committed," but the directory already exists in the working tree containing `agent-guidance.md`, `definition-of-done.md`, `000-index.md`, and all `TNNN-*.md` ticket files, so a `.gitkeep` there would have no effect. Operator confirmed skipping it during planning.
+- **TODOs left for other tickets:** None.
+- **Commit hashes:** *pending — recorded in follow-up commit (see `git log --oneline | grep T001`).*

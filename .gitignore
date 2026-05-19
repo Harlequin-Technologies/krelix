@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+dist/
+build/
+
+# Node
+node_modules/
+dist/
+.vite/
+*.log
+.parcel-cache/
+
+# uv (uv.lock IS committed)
+.uv-cache/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE (.vscode/settings.json may be committed if shared editor settings are added later)
+.idea/
+.vscode/
+!.vscode/settings.json
+*.swp
+
+# Env files (.env.example IS committed)
+.env
+.env.local
+.env.*.local
+
+# Krelix runtime (hot-tier path on a host with the agent installed)
+/var/lib/krelix/

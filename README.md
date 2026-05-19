@@ -28,6 +28,15 @@ Krelix is a unified control plane for self-hosted LLM inference infrastructure. 
 - Agents can load a model, run a workload, eject it, and request a different model — all programmatically
 - Designed for multi-agent systems where sub-agents need different models for different tasks
 
+## Repository Layout
+
+- `backend/` — FastAPI control-plane service (API, ORM, arq workers, auth).
+- `frontend/` — React + Vite + TypeScript single-page app served by the control plane.
+- `agent/` — Per-host Krelix agent (model I/O, two-tier storage, GPU introspection, inference-engine lifecycle).
+- `packaging/` — Dockerfiles, compose files, and `packaging/systemd/` units for bare-metal installs.
+- `docs/` — Discovery, vision, technical plan, and per-ticket work breakdown.
+- `.claude/` — Planning skills and agent-tooling configuration (not source).
+
 ## Status
 
 Krelix is under active development. Expect breaking changes.
