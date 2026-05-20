@@ -242,7 +242,8 @@ CI is the first line of defense against agent-induced regressions. Every ticket 
   - `main.yml` (push to GHCR on `main`) and `release.yml` (version tagging + `:latest`) — explicitly out of scope; a later ticket per [deployment.md](../03-technical/deployment.md) "CI/CD Detail".
   - Branch protection requiring all five jobs to pass before merge — operator-side GitHub UI work, not in repo.
   - Renovate / Dependabot configuration — polish-phase, not in v1.
-- **Commit hashes:** _Fill in after commit._
+- **Commit hashes:**
+  - `60e8ea6` — chore(T008): add PR workflow, CODEOWNERS, PR template, CI badge
 
 ### Operator verification needed
 
