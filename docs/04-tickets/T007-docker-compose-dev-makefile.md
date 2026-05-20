@@ -1,6 +1,6 @@
 # T007 — docker-compose.dev.yml + Makefile dev targets
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 1.5 hr
 **Depends on:** T002, T003, T004
@@ -219,6 +219,28 @@ Local dev uses Compose for the stateful services (Postgres, Redis) so they're di
 ## Completion Summary
 
 - **Files touched:**
+  - Created `docker-compose.dev.yml`
+  - Created `.env.example`
+  - Created `Makefile`
+  - Created `docs/dev-setup.md`
+  - Modified `README.md` (added "Local Development" section)
 - **Deviations from the ticket (if any):**
-- **TODOs left for other tickets:**
+  - **Postgres volume mount path:** the ticket sketch mounts `postgres-dev-data:/var/lib/postgresql/data`, but the official Postgres 18 image refuses to start against that path (it uses major-version-specific subdirectories under `/var/lib/postgresql` for `pg_upgrade --link` compatibility). Changed the mount to `postgres-dev-data:/var/lib/postgresql`. Verified the container reaches a healthy state.
+  - **Healthcheck wait-loop:** swapped the ticket's `docker compose ps --format json | grep -q '"Health":"healthy".*"Health":"healthy"'` for a 60-iteration `docker inspect -f '{{.State.Health.Status}}'` poll on each container. The original grep can never match because modern `docker compose ps --format json` emits one JSON object per line, so it always times out. Pre-approved with user before coding.
+  - `.gitignore` was already correct (`.env` ignored from T001) — verified, no edits needed.
+- **TODOs left for other tickets:** None.
 - **Commit hashes:**
+  - `4ae2dd3` — feat(T007): docker-compose.dev.yml + Makefile dev targets
+
+### Acceptance criteria status
+
+- [x] `docker-compose.dev.yml` exists and brings up healthy Postgres 18 + Redis 7 containers via `make dev-services`.
+- [x] `.env.example` exists with the documented variables and safe placeholder values.
+- [x] `.env` is gitignored (already covered in T001; verified).
+- [x] `Makefile` has `help`, `dev`, `dev-services`, `dev-backend`, `dev-worker`, `dev-frontend`, `dev-down`, `lint`, `typecheck`, `test`, `build` targets.
+- [x] `make help` lists all targets.
+- [x] `make dev-services` brings up Postgres and Redis; `make dev-down` tears them down.
+- [x] `make dev-backend` starts the FastAPI app with auto-reload at `http://127.0.0.1:8000`; `/healthz` returns 200 (verified with curl).
+- [x] `make dev-frontend` starts Vite at `http://localhost:5173` showing the "Krelix" page (verified via `curl` for `<title>Krelix</title>`).
+- [x] `make lint`, `make typecheck`, `make test`, `make build` all exit 0 (verified on the current working tree after `make dev-services`).
+- [x] `docs/dev-setup.md` exists and describes the workflow end-to-end.
