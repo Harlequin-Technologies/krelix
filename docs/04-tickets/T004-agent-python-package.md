@@ -1,6 +1,6 @@
 # T004 — Agent Python package + uv
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 45 min
 **Depends on:** T001
@@ -138,6 +138,34 @@ The host agent runs on each GPU host, separate from the control plane. It has a 
 ## Completion Summary
 
 - **Files touched:**
+  - Created: `agent/pyproject.toml`, `agent/uv.lock`, `agent/.python-version`, `agent/README.md`, `agent/src/krelix_agent/__init__.py`, `agent/src/krelix_agent/py.typed`, `agent/src/krelix_agent/cli.py`, `agent/tests/__init__.py`, `agent/tests/test_smoke.py`
+  - Deleted: `agent/.gitkeep`
+  - Root `.gitignore` already covered `.venv/` and the cache dirs from T001 — no edit needed.
 - **Deviations from the ticket (if any):**
+  - The ticket snippet for `cli.py` used a bare `typer.Typer()` with one `@app.command()`. Typer collapses single-command apps to the root, so `krelix-agent version` (the literal acceptance-criterion invocation) was rejected with "unexpected extra argument (version)". Added an empty `@app.callback()` and `no_args_is_help=True` so `version` stays a named subcommand and the AC's exact invocation works. Behavior of `version` itself is unchanged from the spec.
 - **TODOs left for other tickets:**
+  - None. Ticket scope was self-contained scaffolding.
 - **Commit hashes:**
+  - `__PENDING__` — backfilled in the docs commit right after the feat commit lands.
+
+### Verification (run from `agent/`)
+
+- `uv sync` — resolved 51 packages, clean.
+- `uv run ruff check .` — All checks passed!
+- `uv run ruff format --check .` — 4 files already formatted.
+- `uv run mypy src` — Success: no issues found in 2 source files.
+- `uv run pytest` — 1 passed.
+- `uv run krelix-agent version` — `0.0.1`.
+- `grep -iE '^name = "(fastapi|sqlalchemy|alembic|asyncpg|arq)"' uv.lock` — no matches (forbidden backend libs absent from agent dep tree).
+- Spot-check of all 14 prod + dev dep licenses via `importlib.metadata` — all MIT, BSD-3-Clause, or Apache-2.0.
+
+### Acceptance criteria status
+
+- [x] `agent/pyproject.toml` exists with all dependencies listed in the ticket.
+- [x] `agent/uv.lock` exists and is committed.
+- [x] `cd agent && uv sync` succeeds.
+- [x] `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy src`, `uv run pytest` all exit 0.
+- [x] `uv run krelix-agent version` prints `0.0.1` and exits 0.
+- [x] `agent/src/krelix_agent/__init__.py` contains `__version__ = "0.0.1"`.
+- [x] No FastAPI / SQLAlchemy / Alembic / asyncpg in the agent dep tree.
+- [x] All dep licenses are MIT / BSD / Apache 2.0.

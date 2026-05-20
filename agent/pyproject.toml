@@ -1,0 +1,63 @@
+[project]
+name = "krelix-agent"
+version = "0.0.1"
+description = "Krelix host agent (per-GPU-host daemon for model downloads, GPU introspection, and vLLM lifecycle)."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "Brian Rodenkirk", email = "brian.rodenkirk@harlequintechnologies.com" }
+]
+dependencies = [
+    "docker>=7.1.0",
+    "httpx>=0.28.1",
+    "huggingface-hub>=1.15.0",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.1",
+    "pynvml>=13.0.1",
+    "structlog>=25.5.0",
+    "typer>=0.25.1",
+    "websockets>=16.0",
+]
+
+[project.scripts]
+krelix-agent = "krelix_agent.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.11.14,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "S", "A", "C4", "T20", "RUF"]
+ignore = ["E501"]  # line length enforced by formatter
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # assert in tests is fine
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["pynvml.*", "docker.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.1.0",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.13",
+]
