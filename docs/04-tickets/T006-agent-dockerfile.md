@@ -1,6 +1,6 @@
 # T006 — Agent Dockerfile (container-mode skeleton)
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 1 hr
 **Depends on:** T004
@@ -119,6 +119,31 @@ The agent runs as a Docker container on each GPU host in container mode. It need
 ## Completion Summary
 
 - **Files touched:**
+  - Created: `agent/Dockerfile`, `agent/.dockerignore`
 - **Deviations from the ticket (if any):**
+  - **Chose Path B** (slim Python base + toolkit-mounted NVML) per the ticket's "try Path B first" guidance. The Dockerfile carries a top-of-file comment documenting the choice and the fallback (swap runtime base to `nvidia/cuda:<tag>-runtime-ubuntu22.04`) if a target host's toolkit does not auto-mount NVML.
+  - The matching backend Dockerfile pins `UV_VERSION=0.11.14`; the agent Dockerfile uses the same pin so both images install via `https://astral.sh/uv/0.11.14/install.sh`. Mirrored the same `UV_PROJECT_ENVIRONMENT` / `UV_COMPILE_BYTECODE` / `UV_LINK_MODE` env block as backend.
+  - The ticket sketch suggests `RUN apt-get install -y --no-install-recommends python3.12 python3.12-venv ca-certificates` on the runtime stage. That step belongs to the Path-A (CUDA-runtime Ubuntu base) variant; with the `python:3.12-slim-bookworm` runtime base it's not needed and is omitted.
+  - **AC "Image runs as non-root user `krelix` — verify with `docker run --rm krelix-agent:dev id`":** as written, that command would pass `id` as an argument to the `krelix-agent` typer app and fail. Verified with `docker run --rm --entrypoint id krelix-agent:dev` instead, which prints `uid=1000(krelix) gid=1000(krelix) groups=1000(krelix)`. The image's `USER` directive is unambiguous; the AC is satisfied — only the invocation in the ticket needed the `--entrypoint` override.
+  - **AC "On a GPU-equipped host with NVIDIA Container Toolkit, `--gpus all` does not produce NVML library load errors":** the dev host running this ticket has no NVIDIA driver and no `nvidia` runtime registered with Docker, so this AC is not exercised here. Path B is the documented approach to satisfy it on a real GPU host; verification is deferred to first real-host install.
 - **TODOs left for other tickets:**
+  - None.
 - **Commit hashes:**
+  - (this commit) — `feat(T006): agent Dockerfile (slim base) + .dockerignore`
+
+### Verification (run from `agent/`)
+
+- `docker build -t krelix-agent:dev .` — success.
+- `docker run --rm krelix-agent:dev` — prints `0.0.1`.
+- `docker run --rm krelix-agent:dev version` — prints `0.0.1`.
+- `docker run --rm --entrypoint id krelix-agent:dev` — `uid=1000(krelix) gid=1000(krelix) groups=1000(krelix)`.
+- `docker images krelix-agent:dev` — `269MB` (well under the 2 GB cap; Path B keeps the CUDA layers out).
+- `docker run --rm --entrypoint ls krelix-agent:dev /app/tests` — fails with "No such file or directory" (`.dockerignore` correctly excludes the `tests/` tree from the build context).
+
+### Acceptance criteria status
+
+- [x] `agent/Dockerfile` builds `krelix-agent:dev` successfully.
+- [x] `docker run --rm krelix-agent:dev` prints `0.0.1`.
+- [x] Image runs as non-root user `krelix` (uid 1000). (Verified via `--entrypoint id`; see Deviations.)
+- [x] Image size is well under 2 GB (269 MB).
+- [ ] `--gpus all` does not produce NVML load errors on a GPU-equipped host. **Not verifiable on this dev host** (no NVIDIA driver / no `nvidia` Docker runtime). Path B is the documented mechanism; defer first-host verification.
