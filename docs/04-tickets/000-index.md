@@ -20,6 +20,7 @@ Copy this exactly when starting a ticket:
 > Working ticket **[TICKET NUMBER]** for **Krelix**.
 >
 > Before starting:
+>
 > 1. Read `docs/04-tickets/agent-guidance.md`
 > 2. Read `docs/04-tickets/definition-of-done.md`
 > 3. Read `docs/04-tickets/[TICKET NUMBER]-*.md`
@@ -260,6 +261,7 @@ Phase 13 (release):
 Master list — check off each ticket as you verify its acceptance criteria yourself (not just when the agent claims done).
 
 **Phase 1 — Scaffolding (8)**
+
 - [ ] T001 — Monorepo layout
 - [ ] T002 — Backend Python package
 - [ ] T003 — Frontend scaffold
@@ -270,6 +272,7 @@ Master list — check off each ticket as you verify its acceptance criteria your
 - [ ] T008 — GitHub Actions PR workflow
 
 **Phase 2 — DB + auth (8)**
+
 - [ ] T009 — Settings + DB/Redis connections
 - [ ] T010 — SQLAlchemy ORM models
 - [ ] T011 — Alembic + initial migration + seed
@@ -280,6 +283,7 @@ Master list — check off each ticket as you verify its acceptance criteria your
 - [ ] T016 — Auth API
 
 **Phase 3 — Settings/vaults (6)**
+
 - [ ] T017 — Global settings API
 - [ ] T018 — HF credential API
 - [ ] T019 — Vault CRUD API
@@ -288,24 +292,28 @@ Master list — check off each ticket as you verify its acceptance criteria your
 - [ ] T022 — Frontend vaults page
 
 **Phase 4 — Endpoint registration (4)**
+
 - [ ] T023 — Endpoint CRUD API + resolved-config helper
 - [ ] T024 — Agent bearer-token auth + registration
 - [ ] T025 — Agent WebSocket skeleton + /agent/v1/config
 - [ ] T026 — Frontend endpoint pages
 
 **Phase 5 — Host agent skeleton (4)**
+
 - [ ] T027 — Agent core: config + CLI
 - [ ] T028 — Agent registration + GPU/MIG inventory
 - [ ] T029 — Agent WebSocket client + heartbeat
 - [ ] T030 — gpu_state frame fanout + frontend live GPU
 
 **Phase 6 — HF + fit prediction (4)**
+
 - [ ] T031 — HF search + metadata API
 - [ ] T032 — Model persistence + revision resolution
 - [ ] T033 — Fit prediction
 - [ ] T034 — Frontend HF browser
 
 **Phase 7 — Deploy (6)**
+
 - [ ] T035 — Deployment create API
 - [ ] T036 — Deployment orchestrator job
 - [ ] T037 — Agent deploy command handler
@@ -314,32 +322,38 @@ Master list — check off each ticket as you verify its acceptance criteria your
 - [ ] T040 — Frontend deploy flow
 
 **Phase 8 — Auto-iteration (3)**
+
 - [ ] T041 — Failure-mode catalog
 - [ ] T042 — Auto-iteration wiring
 - [ ] T043 — Iteration events frontend
 
 **Phase 9 — Logs (3)**
+
 - [ ] T044 — Agent log capture
 - [ ] T045 — Control plane SSE
 - [ ] T046 — Frontend log viewer
 
 **Phase 10 — Two-tier + eviction (3)**
+
 - [ ] T047 — Two-tier flow + atomic rename
 - [ ] T048 — LRU eviction with pinning
 - [ ] T049 — Pin/unpin API + frontend
 
 **Phase 11 — Polish (4)**
+
 - [ ] T050 — Deployment history view
 - [ ] T051 — License + revision badges
 - [ ] T052 — Download progress + config override
 - [ ] T053 — Endpoint detail polish
 
 **Phase 12 — Bare-metal agent (3)**
+
 - [ ] T054 — Subprocess engine adapter
 - [ ] T055 — systemd unit + runbook
 - [ ] T056 — Bare-metal validation
 
 **Phase 13 — Release (4)**
+
 - [ ] T057 — README + runbooks
 - [ ] T058 — Fit-prediction test set
 - [ ] T059 — main + release CI
