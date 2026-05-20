@@ -227,4 +227,4 @@ The frontend is a single-page application served by the FastAPI backend in produ
   - None.
 
 - **Commit hashes:**
-  - (TBD — to be filled in after commit)
+  - `10730f2` — feat(T003): scaffold React 19 + Vite + Tailwind frontend
