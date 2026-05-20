@@ -1,6 +1,6 @@
 # T003 — Frontend React + Vite + TypeScript + Tailwind scaffold
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 1.5 hr
 **Depends on:** T001
@@ -210,6 +210,21 @@ The frontend is a single-page application served by the FastAPI backend in produ
 ## Completion Summary
 
 - **Files touched:**
+  - Created: `frontend/package.json`, `frontend/pnpm-lock.yaml`, `frontend/pnpm-workspace.yaml`, `frontend/tsconfig.json`, `frontend/tsconfig.node.json`, `frontend/vite.config.ts`, `frontend/index.html`, `frontend/src/main.tsx`, `frontend/src/App.tsx`, `frontend/src/index.css`, `frontend/src/router.tsx`, `frontend/src/queryClient.ts`, `frontend/eslint.config.js`, `frontend/.prettierrc`, `frontend/.prettierignore`, `frontend/postcss.config.js`, `frontend/tailwind.config.ts`, `frontend/README.md`, `frontend/.gitignore` (Vite scaffold).
+  - Deleted: `frontend/.gitkeep`.
+  - Not touched (verified): `backend/`, `agent/`, `packaging/`, `docs/` (other than this Completion Summary + Status line), `.claude/`, root `.gitignore`.
+
 - **Deviations from the ticket (if any):**
+  - **`@typescript-eslint` package shape.** Ticket lists `@typescript-eslint/parser` + `@typescript-eslint/eslint-plugin` (the legacy split form) and they are both pinned in `package.json` and used in `eslint.config.js`. The newer single-meta-package `typescript-eslint` was not added.
+  - **No `eslint-plugin-react-refresh`.** The Vite scaffold added it; the ticket dep list does not include it. Removed to stay within the listed deps (the React-Refresh runtime is provided by `@vitejs/plugin-react` for HMR regardless — only the lint rule is missing).
+  - **Build script.** Ticket prescribes `"build": "tsc -b && vite build"`. With separate `tsconfig.json` (app) and `tsconfig.node.json` (vite-config), `tsc -b` requires referenced projects to be `composite: true`, and composite projects cannot have `noEmit: true` — TS 5.6+ rejects this combo. Used `"build": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json && vite build"` instead. Same intent (typecheck both configs, then bundle), no extra emit artefacts. Alternative would have been to add a third `tsconfig.app.json` and make `tsconfig.json` a pure solution config; not done to keep the file list close to the ticket.
+  - **`pnpm test` flag.** Ticket says `"test": "vitest run"` and that it should exit 0 with no tests. Vitest 2 exits 1 when zero test files are discovered, so the script is `"test": "vitest run --passWithNoTests"`. Drop the flag once any test file is added.
+  - **`frontend/pnpm-workspace.yaml`.** Added (not in the ticket file list). Required to silence pnpm 11's `ERR_PNPM_IGNORED_BUILDS` for `esbuild`'s postinstall (which downloads the platform binary). Without approval, `pnpm` errors on every script run.
+  - **License audit footnote.** All transitive deps are permissive: MIT / MIT-0 / BSD-2 / BSD-3 / 0BSD / Apache-2.0 / ISC / BlueOak-1.0.0 / Python-2.0 / CC-BY-4.0 (the last applies only to `caniuse-lite`'s data, not code; attribution-only, commercial-safe). No GPL/AGPL/proprietary.
+  - **Local `pnpm` install.** The system had no global `pnpm`; corepack was used to prepare `pnpm@11.1.3` under `$HOME/.cache/corepack` with a shim at `$HOME/.local/bin/pnpm`. Future tickets (T007, T008, T020+) will all need pnpm on PATH — the operator should install it system-wide (`sudo corepack enable pnpm` or `npm i -g pnpm`).
+
 - **TODOs left for other tickets:**
+  - None.
+
 - **Commit hashes:**
+  - (TBD — to be filled in after commit)
