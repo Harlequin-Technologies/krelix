@@ -1,6 +1,6 @@
 # T008 — GitHub Actions PR workflow (lint + typecheck + test + image build)
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 1.5 hr
 **Depends on:** T005, T006
@@ -233,6 +233,30 @@ CI is the first line of defense against agent-induced regressions. Every ticket 
 ## Completion Summary
 
 - **Files touched:**
-- **Deviations from the ticket (if any):**
+  - Created `.github/workflows/pr.yml` — five-job PR pipeline (backend, frontend, agent, docker-control, docker-agent) per the ticket's YAML, verbatim.
+  - Created `.github/CODEOWNERS` — `* @brian-rodenkirk` (operator confirmed the handle).
+  - Created `.github/pull_request_template.md` — verbatim from the ticket.
+  - Modified `README.md` — added the PR Pipeline status badge under the H1.
+- **Deviations from the ticket (if any):** None. The badge URL points at `Harlequin-Technologies/krelix` to match the configured git remote. The badge URL is the final form; the ticket noted it might need confirmation after the first PR run, but GitHub's badge URL scheme is deterministic from `<org>/<repo>/actions/workflows/<file>.yml`, so no follow-up should be needed.
 - **TODOs left for other tickets:**
-- **Commit hashes:**
+  - `main.yml` (push to GHCR on `main`) and `release.yml` (version tagging + `:latest`) — explicitly out of scope; a later ticket per [deployment.md](../03-technical/deployment.md) "CI/CD Detail".
+  - Branch protection requiring all five jobs to pass before merge — operator-side GitHub UI work, not in repo.
+  - Renovate / Dependabot configuration — polish-phase, not in v1.
+- **Commit hashes:** _Fill in after commit._
+
+### Operator verification needed
+
+The acceptance criterion "On a real PR, all five jobs run and exit 0" and the wall-clock timing criterion cannot be verified from the agent side — they require pushing this branch and opening a PR against `main`. Once that happens:
+
+- Confirm all five jobs run and each exits 0.
+- Confirm cold-cache run is under 10 min; warm-cache run is under 5 min.
+- If `astral-sh/setup-uv@v3` has moved past `v3` by the time you run this, the workflow should be re-pinned to the current major.
+
+### Acceptance criteria status
+
+- [x] `.github/workflows/pr.yml` exists with the five jobs.
+- [ ] On a real PR, all five jobs run and exit 0 — pending operator-driven PR run.
+- [x] Each job uses caching (uv cache via `enable-cache: true`, pnpm cache via `cache: pnpm`, BuildKit cache via `type=gha`).
+- [ ] Pipeline wall-clock under 10 min warm / 5 min fully cached — pending operator-driven PR run.
+- [x] `.github/CODEOWNERS` and `.github/pull_request_template.md` exist.
+- [x] README has the CI badge.
