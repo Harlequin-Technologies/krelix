@@ -146,7 +146,8 @@ The host agent runs on each GPU host, separate from the control plane. It has a 
 - **TODOs left for other tickets:**
   - None. Ticket scope was self-contained scaffolding.
 - **Commit hashes:**
-  - `__PENDING__` — backfilled in the docs commit right after the feat commit lands.
+  - `0f545c0` — `feat(T004): scaffold agent python package with uv toolchain`
+  - (this commit) — `docs(T004): record commit hash in completion summary`
 
 ### Verification (run from `agent/`)
 
