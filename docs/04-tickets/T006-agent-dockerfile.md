@@ -129,7 +129,8 @@ The agent runs as a Docker container on each GPU host in container mode. It need
 - **TODOs left for other tickets:**
   - None.
 - **Commit hashes:**
-  - (this commit) — `feat(T006): agent Dockerfile (slim base) + .dockerignore`
+  - `c732259` — `feat(T006): agent Dockerfile (slim base) + .dockerignore`
+  - (this commit) — `docs(T006): record commit hash in completion summary`
 
 ### Verification (run from `agent/`)
 
