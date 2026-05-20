@@ -1,6 +1,6 @@
 # T005 — Control-plane Dockerfile + basic FastAPI app (healthz/readyz) + structlog
 
-**Status:** Not started
+**Status:** Done
 **Phase:** 1 — Project scaffolding and dev environment
 **Estimated session length:** 2 hr
 **Depends on:** T002
@@ -185,6 +185,33 @@ Build the minimum runnable `krelix-control` Docker image: a multi-stage Dockerfi
 ## Completion Summary
 
 - **Files touched:**
+  - `backend/Dockerfile` (created)
+  - `backend/.dockerignore` (created)
+  - `backend/src/krelix/main.py` (created)
+  - `backend/src/krelix/logging.py` (created)
+  - `backend/src/krelix/worker.py` (created)
+  - `backend/src/krelix/__main__.py` (created)
+  - `backend/tests/__init__.py` (created)
+  - `backend/tests/test_smoke.py` (created)
+  - `backend/tests/test_health.py` (created)
+  - `backend/tests/test_logging.py` (created)
+  - `backend/src/krelix/__init__.py` (modified — sets `__version__`)
+  - `backend/src/krelix/py.typed` (created)
+  - `backend/README.md` (created)
+  - `backend/pyproject.toml` (modified — production+dev deps, project scripts, ruff/mypy/pytest config)
+  - `backend/uv.lock` (created)
+
 - **Deviations from the ticket (if any):**
+  - **T002 backfill rolled into this ticket.** T002 was committed as a partial WIP (no deps in `pyproject.toml`, no `uv.lock`, no `tests/`, no `__version__` / `py.typed`, empty `README.md`). T005 depends on T002, so the remaining T002 prerequisites were completed in this session. All deps installed are the ones T002 originally enumerated.
+  - **`worker.py` registers a single private `_noop` placeholder function** instead of an empty `functions: list = []` as the ticket text in Step 4 suggested. Reason: arq 0.26.3 raises `RuntimeError("at least one function or cron_job must be registered")` if zero functions are configured, which would prevent `docker run krelix-control:dev krelix-worker` from idling — directly contradicting acceptance criterion #4. The placeholder is clearly marked for removal once Phase 4 deployment jobs land.
+  - **`uv` version pinned to `0.11.14`** in the Dockerfile (the placeholder `0.5.x` in the ticket was an outdated example). 0.11.14 matches the local toolchain that produced `uv.lock`, so frozen sync is reproducible.
+  - **Tests counted 6, not 3.** The ticket's AC line says "1 smoke + 2 health = 3 tests" but a later AC line also requires a redaction unit test in `test_logging.py`. Delivered: 1 smoke + 2 health + 3 redaction = 6.
+  - **`configure_logging()` also reroutes stdlib loggers (uvicorn, root) through a single structlog JSON handler.** Without this, uvicorn's startup banner is non-JSON plain text and the "all container logs are valid JSON" AC fails. `uvicorn.run(..., log_config=None)` keeps uvicorn from re-installing its default handlers after the structlog setup.
+  - **`tests/**` ruff ignores extended from `S101` to also cover `S105`/`S106`** so fake-credential strings in the redaction tests don't trip the hardcoded-password rule.
+
 - **TODOs left for other tickets:**
+  - `TODO(T009)` in `backend/src/krelix/main.py` — wire real DB + Redis readiness checks into `/readyz`.
+  - In-code note in `backend/src/krelix/worker.py` to remove the `_noop` placeholder once a real arq job is registered.
+
 - **Commit hashes:**
+  - (filled in after commit)
