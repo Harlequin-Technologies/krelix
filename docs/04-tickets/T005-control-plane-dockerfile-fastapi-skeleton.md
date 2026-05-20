@@ -214,4 +214,6 @@ Build the minimum runnable `krelix-control` Docker image: a multi-stage Dockerfi
   - In-code note in `backend/src/krelix/worker.py` to remove the `_noop` placeholder once a real arq job is registered.
 
 - **Commit hashes:**
-  - (filled in after commit)
+  - `a86d643` — feat(T002): complete backend python package scaffold (T002 backfill, prerequisite for T005)
+  - `ebd24fa` — feat(T005): control-plane Dockerfile + FastAPI healthz/readyz + structlog
+  - (this docs amendment commit added in a follow-up)
