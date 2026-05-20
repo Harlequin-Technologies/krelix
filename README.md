@@ -37,6 +37,20 @@ Krelix is a unified control plane for self-hosted LLM inference infrastructure. 
 - `docs/` — Discovery, vision, technical plan, and per-ticket work breakdown.
 - `.claude/` — Planning skills and agent-tooling configuration (not source).
 
+## Local Development
+
+A single `make dev` command brings up a complete local dev environment: Postgres + Redis in containers, and the backend, worker, and frontend running natively for fast iteration.
+
+```bash
+cp .env.example .env   # then edit KRELIX_SECRET_KEY
+make dev-services      # boot Postgres + Redis
+make dev-backend       # in another terminal
+make dev-worker        # in another terminal
+make dev-frontend      # in another terminal
+```
+
+See [`docs/dev-setup.md`](docs/dev-setup.md) for the full walkthrough, prerequisites, and tear-down instructions. Run `make help` to list all available targets.
+
 ## Status
 
 Krelix is under active development. Expect breaking changes.

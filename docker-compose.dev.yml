@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: krelix-dev-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: krelix
+      POSTGRES_PASSWORD: krelix_dev
+      POSTGRES_DB: krelix
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U krelix"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: krelix-dev-redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "krelix_dev"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis-dev-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "krelix_dev", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres-dev-data:
+  redis-dev-data:
