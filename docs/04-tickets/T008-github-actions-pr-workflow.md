@@ -237,7 +237,9 @@ CI is the first line of defense against agent-induced regressions. Every ticket 
   - Created `.github/CODEOWNERS` — `* @brian-rodenkirk` (operator confirmed the handle).
   - Created `.github/pull_request_template.md` — verbatim from the ticket.
   - Modified `README.md` — added the PR Pipeline status badge under the H1.
-- **Deviations from the ticket (if any):** None. The badge URL points at `Harlequin-Technologies/krelix` to match the configured git remote. The badge URL is the final form; the ticket noted it might need confirmation after the first PR run, but GitHub's badge URL scheme is deterministic from `<org>/<repo>/actions/workflows/<file>.yml`, so no follow-up should be needed.
+- **Deviations from the ticket (if any):**
+  - The ticket's YAML pinned `pnpm/action-setup@v4` to `version: 9`. The first PR run failed because pnpm 9 strictly requires a `packages:` field in `frontend/pnpm-workspace.yaml`, but that file (created in T003) uses pnpm 10+'s `allowBuilds` / `onlyBuiltDependencies` convention with no `packages:` declaration. Bumped CI to `version: 10` to match the lockfile's source and clear the install step. Approved by operator before applying.
+  - The badge URL points at `Harlequin-Technologies/krelix` to match the configured git remote. The badge URL is the final form; the ticket noted it might need confirmation after the first PR run, but GitHub's badge URL scheme is deterministic from `<org>/<repo>/actions/workflows/<file>.yml`, so no follow-up should be needed.
 - **TODOs left for other tickets:**
   - `main.yml` (push to GHCR on `main`) and `release.yml` (version tagging + `:latest`) — explicitly out of scope; a later ticket per [deployment.md](../03-technical/deployment.md) "CI/CD Detail".
   - Branch protection requiring all five jobs to pass before merge — operator-side GitHub UI work, not in repo.
