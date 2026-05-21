@@ -246,20 +246,24 @@ CI is the first line of defense against agent-induced regressions. Every ticket 
   - Renovate / Dependabot configuration — polish-phase, not in v1.
 - **Commit hashes:**
   - `60e8ea6` — chore(T008): add PR workflow, CODEOWNERS, PR template, CI badge
+  - `956df02` — docs(T008): record commit hash in completion summary
+  - `de25986` — fix(T008): bump CI pnpm v9 → v10 to read pnpm-workspace.yaml
 
-### Operator verification needed
+### Operator verification (completed)
 
-The acceptance criterion "On a real PR, all five jobs run and exit 0" and the wall-clock timing criterion cannot be verified from the agent side — they require pushing this branch and opening a PR against `main`. Once that happens:
+Verified on PR #1 (`attempt/claude-code-v1` → `main`):
 
-- Confirm all five jobs run and each exits 0.
-- Confirm cold-cache run is under 10 min; warm-cache run is under 5 min.
-- If `astral-sh/setup-uv@v3` has moved past `v3` by the time you run this, the workflow should be re-pinned to the current major.
+- First push (`956df02`): 4 of 5 jobs green; `frontend` failed at `pnpm install --frozen-lockfile` with `ERROR packages field missing or empty` due to pnpm v9 / pnpm-workspace.yaml v10-format mismatch. Resolved via the `de25986` deviation above.
+- Second push (`de25986`): **All 5 jobs green.** Per-job times (parallel): agent 13s, backend 19s, docker-control 25s, docker-agent 32s, frontend 35s. Effective wall-clock ≈ 35s — well inside the < 5 min warm-cache target.
+- `astral-sh/setup-uv@v3` is still on `v3` as of this verification; no re-pinning needed.
+
+PR was left open without merging (the experiment requires `main` to stay pristine).
 
 ### Acceptance criteria status
 
 - [x] `.github/workflows/pr.yml` exists with the five jobs.
-- [ ] On a real PR, all five jobs run and exit 0 — pending operator-driven PR run.
+- [x] On a real PR, all five jobs run and exit 0 — confirmed on PR #1 second push.
 - [x] Each job uses caching (uv cache via `enable-cache: true`, pnpm cache via `cache: pnpm`, BuildKit cache via `type=gha`).
-- [ ] Pipeline wall-clock under 10 min warm / 5 min fully cached — pending operator-driven PR run.
+- [x] Pipeline wall-clock under 10 min warm / 5 min fully cached — ~35s wall-clock observed.
 - [x] `.github/CODEOWNERS` and `.github/pull_request_template.md` exist.
 - [x] README has the CI badge.
